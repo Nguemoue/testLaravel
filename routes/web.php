@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\Task1Controller;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,16 +15,24 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+/**
+ * Route for the first task (task1)
+ */
+Route::get("/task1",'App\Http\Controllers\Task1Controller@index')->name("task1");
+Route::post("/taks1/filter",'App\Http\Controllers\Task1Controller@filter')->name("task1.filter");
+
+/**
+ * Route for the senconde task (task2)
+ */
+Route::get("/task2", 'App\Http\Controllers\Task2Controller@index')->name("task2");
+
+
+
+Route::get("/dashboard",function(){
+    return view("dashboard");
+})->name('dashboard');
 
 require __DIR__.'/auth.php';

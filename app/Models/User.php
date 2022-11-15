@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Actions\Quota;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,10 +18,34 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'first_name',
+        'last_name',
+        'username',
+        'referred_by',
+        'enrolled_date'
     ];
+
+
+
+    function category(){
+        
+        return $this->belongsToMany(Categorie::class,"user_category","user_id","category_id");
+    }
+
+    function getPercentageAttribute(){
+        return Quota::getQuota($this->countDistributor());
+    }
+    function getDistributor(){
+        $user = User::query()->where("id","=",$this->referred_by)->first();
+        // dd($user);
+        return $user;
+    }
+
+    function countDistributor(){
+        return User::query()->selectRaw("count(referred_by) as nb")->where("referred_by","=",$this->referred_by)->first("nb")->nb;
+    }    
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -39,6 +63,6 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'enrolled_date' => 'date',
     ];
 }
