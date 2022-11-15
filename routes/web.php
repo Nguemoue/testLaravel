@@ -22,7 +22,7 @@ Route::get('/', function () {
  * Route for the first task (task1)
  */
 Route::get("/task1",'App\Http\Controllers\Task1Controller@index')->name("task1");
-Route::post("/taks1/filter",'App\Http\Controllers\Task1Controller@filter')->name("task1.filter");
+Route::post("/task1/filter",'App\Http\Controllers\Task1Controller@filter')->name("task1.filter");
 
 /**
  * Route for the senconde task (task2)
